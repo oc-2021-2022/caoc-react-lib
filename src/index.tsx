@@ -1,10 +1,12 @@
-import * as React from 'react'
-import styles from './styles.module.css'
+import { Option, OptionList, OptionProps, Select, SelectProps } from './select'
 
-interface Props {
-  text: string
-}
+import { ExampleComponent } from './example/ExampleComponent'
 
-export const ExampleComponent = ({ text }: Props) => {
-  return <div className={styles.test}>Example Component: {text}</div>
+export {
+  ExampleComponent,
+  Option,
+  OptionList,
+  OptionProps,
+  Select,
+  SelectProps,
 }
