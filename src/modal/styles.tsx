@@ -3,11 +3,20 @@ import React from 'react';
 import { faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
-const XMarkComponent = ({ handleClick, className }: {
-  handleClick?: () => void,
+const XMarkComponent = ({
+  handleClick,
+  className
+}: {
+  handleClick?: () => void
   className?: string
-}) => <FontAwesomeIcon className={className} onClick={handleClick} icon={faXmarkCircle} size='2x' />
-
+}) => (
+  <FontAwesomeIcon
+    className={className}
+    onClick={handleClick}
+    icon={faXmarkCircle}
+    size='2x'
+  />
+)
 export const ModalContainer = styled.div`
   position: absolute;
   top: calc(50% - 250px);
@@ -23,9 +32,9 @@ export const ModalContainer = styled.div`
   max-height: 100%;
   background-color: white;
   border-radius: 10px;
-  box-shadow: -5px 5px 5px 0px rgba(0,0,0,0.75);
-  padding: 1em
-`;
+  box-shadow: -5px 5px 5px 0px rgba(0, 0, 0, 0.75);
+  padding: 1em;
+`
 
 export const CloseButton = styled(XMarkComponent)`
   position: absolute;
@@ -37,7 +46,7 @@ export const CloseButton = styled(XMarkComponent)`
 export const ModalContent = styled.div`
   overflow: auto;
   padding: 0px 2em;
-`;
+`
 
 export const ModalShadow = styled.div`
   position: fixed;
@@ -47,11 +56,11 @@ export const ModalShadow = styled.div`
   background-color: black;
   opacity: 0.7;
   z-index: 4;
-`;
+`
 
 export const ModalBanner = styled.div`
   margin-bottom: 20px;
   background-color: blue;
   color: white;
   padding: 10px;
-`;
+`
