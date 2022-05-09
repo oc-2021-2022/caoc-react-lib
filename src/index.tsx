@@ -1,12 +1,7 @@
-import { Option, OptionList, OptionProps, Select, SelectProps } from './select'
-
 import { ExampleComponent } from './example/ExampleComponent'
+import { Modal } from './modal'
 
 export {
   ExampleComponent,
-  Option,
-  OptionList,
-  OptionProps,
-  Select,
-  SelectProps,
+  Modal
 }
