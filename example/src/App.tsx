@@ -18,7 +18,12 @@ const App = (): JSX.Element => {
           {
             title: 'Type',
             accessor: 'show.type'
-          },
+          }
+        ]
+      },
+      {
+        title: 'Type',
+        columns: [
           {
             title: 'Language',
             accessor: 'show.language'
@@ -68,7 +73,9 @@ const App = (): JSX.Element => {
             {tableHeaders.map((headerGroups) => (
               <tr>
                 {headerGroups.headers.map((columns) => (
-                  <th>{columns.render('title')}</th>
+                  <th {...columns.tableHeaderProps()}>
+                    {columns.render('title')}
+                  </th>
                 ))}
               </tr>
             ))}

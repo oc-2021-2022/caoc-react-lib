@@ -58,12 +58,12 @@ function generateHeader(
   headers: GenericColumn[],
   parent?: string
 ): DatatableHeaderGroups[] {
-  let columns: DatableHeaderColumn[] = []
+  const columns: DatableHeaderColumn[] = []
   return [
     {
       headers: headers.map((header: GenericColumn): any => {
         const headerGroups = generateHeaderGroups(header, parent)
-        if (headerGroups.columns) columns = [...headerGroups.columns]
+        if (headerGroups.columns) columns.push(...headerGroups.columns)
         return headerGroups
       })
     },
