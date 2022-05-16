@@ -45,8 +45,8 @@ const App = (): JSX.Element => {
     ],
     []
   )
-  const { tableHeaders } = useTable({ columns, data })
-  console.log(tableHeaders)
+  const { tableHeaders, rows } = useTable({ columns, data })
+  console.log(tableHeaders, rows)
   return (
     <>
       <ExampleComponent text='Create React Library Example 😄 Michel' />
@@ -68,10 +68,10 @@ const App = (): JSX.Element => {
 
       <div>
         <p>Datatable</p>
-        <table>
+        <table style={{ border: '3px solid black' }}>
           <thead>
             {tableHeaders.map((headerGroups) => (
-              <tr>
+              <tr {...headerGroups.tableHeaderGroupsProps()}>
                 {headerGroups.headers.map((columns) => (
                   <th {...columns.tableHeaderProps()}>
                     {columns.render('title')}
@@ -80,6 +80,24 @@ const App = (): JSX.Element => {
               </tr>
             ))}
           </thead>
+          <tbody>
+            {rows.map((row: any, i: number) => (
+              <tr key={i}>
+                {row.map((value: any, index: number) => (
+                  <td
+                    style={{
+                      border: '1px solid black',
+                      margin: '0',
+                      padding: '0.5rem'
+                    }}
+                    key={index}
+                  >
+                    {value}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </>

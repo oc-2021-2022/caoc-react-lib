@@ -1,56 +1,30 @@
-/* eslint-disable no-debugger */
-import React, { useEffect, useState } from 'react'
+import {
+  CellValue,
+  DatatableHeader,
+  DatatableHeaderColumn,
+  DatatableHeaderGroups,
+  GenericColumn,
+  TDatatable
+} from './Type'
+import { useEffect, useState } from 'react'
 
-type HeaderColumn = {
-  title: string
-  accessor?: string
-}
-
-type MainHeaderColumn = {
-  title: string
-  columns: HeaderColumn[]
-}
-
-type GenericColumn = {
-  title: string
-  accessor?: string
-  columns?: HeaderColumn[]
-}
-
-type TDatatable = {
-  columns: MainHeaderColumn[]
-  data: any
-}
-
-type DatableHeaderColumn = {
-  title: string
-  render: (accessor: string) => React.ReactNode
-  parent: string | undefined
-}
-
-type DatatableHeader = {
-  title: string
-  columns?: DatableHeaderColumn[]
-  parent: string | undefined
-  render: (accessor: string) => React.ReactNode
-  tableHeaderProps: () => {
-    key: string
-  }
-}
-type DatatableHeaderGroups = {
-  headers: DatatableHeader[]
-}
-
-export function useTable({ columns }: TDatatable) {
+export function useTable({ data, columns }: TDatatable): {
+  tableHeaders: DatatableHeaderGroups[]
+  rows: CellValue[]
+} {
   const [tableHeaders, setTableHeader] = useState<DatatableHeaderGroups[]>([])
+  const [rows, setRows] = useState<CellValue[]>([])
 
   useEffect(() => {
     if (!tableHeaders.length) setTableHeader(generateHeader(columns))
+    if (!rows.length && tableHeaders.length)
+      setRows(generateCellGroups(data, tableHeaders))
     return () => {}
   }, [tableHeaders])
-
+  console.log(rows)
   return {
-    tableHeaders
+    tableHeaders,
+    rows
   }
 }
 
@@ -58,17 +32,23 @@ function generateHeader(
   headers: GenericColumn[],
   parent?: string
 ): DatatableHeaderGroups[] {
-  const columns: DatableHeaderColumn[] = []
+  const columns: DatatableHeaderColumn[] = []
   return [
     {
-      headers: headers.map((header: GenericColumn): any => {
+      headers: headers.map((header: GenericColumn): DatatableHeader => {
         const headerGroups = generateHeaderGroups(header, parent)
         if (headerGroups.columns) columns.push(...headerGroups.columns)
         return headerGroups
+      }),
+      tableHeaderGroupsProps: () => ({
+        key: 'table-header-main-groups'
       })
     },
     {
-      headers: columns
+      headers: columns,
+      tableHeaderGroupsProps: () => ({
+        key: 'table-header-groups'
+      })
     }
   ]
 }
@@ -80,20 +60,49 @@ function generateHeaderGroups(
   const headerGroups: DatatableHeader = {
     title: '',
     parent,
+    accessor: header.accessor,
     render: function (accessor: string): React.ReactNode {
       return header[accessor]
     },
     tableHeaderProps: () => {
       return {
-        key: header.title.toLowerCase()
+        key: header.title.toLowerCase(),
+        colSpan: headerGroups.columns?.length
       }
     }
   }
+
   headerGroups.title = header.title
-  if (header.columns) {
-    headerGroups.columns = header.columns.map((column: GenericColumn) =>
-      generateHeaderGroups(column, header.title)
-    )
-  }
+  if (header.columns)
+    headerGroups.columns = generateHeaderColumns(header.columns, header.title)
+
   return headerGroups
+}
+
+function generateHeaderColumns(columns: GenericColumn[], parent: string) {
+  return columns.map((column: GenericColumn) =>
+    generateHeaderGroups(column, parent)
+  )
+}
+
+function generateCellGroups(
+  data: any,
+  headersGroup: DatatableHeaderGroups[]
+): CellValue[] {
+  const accessors = headersGroup
+    .map(({ headers }: DatatableHeaderGroups) => headers)
+    .flat()
+    .map(({ accessor }: DatatableHeaderColumn) => accessor)
+    .filter((accessor: string | undefined) => accessor !== undefined)
+
+  const cells = data.map((item: any) => {
+    // const values = {}
+    return accessors.map((accessor: string) => {
+      const [row, subrow] = accessor.split('.')
+      // values[accessor] = item[row][subrow]
+      return item[row][subrow]
+    })
+    // return values
+  })
+  return cells
 }
