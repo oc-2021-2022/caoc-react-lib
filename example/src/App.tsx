@@ -68,12 +68,19 @@ const App = (): JSX.Element => {
 
       <div>
         <p>Datatable</p>
-        <table style={{ border: '3px solid black' }}>
+        <table style={{ border: '3px solid black', borderSpacing: '0' }}>
           <thead>
             {tableHeaders.map((headerGroups) => (
               <tr {...headerGroups.tableHeaderGroupsProps()}>
                 {headerGroups.headers.map((columns) => (
-                  <th {...columns.tableHeaderProps()}>
+                  <th
+                    style={{
+                      border: '1px solid black',
+                      margin: '0',
+                      padding: '0.5rem'
+                    }}
+                    {...columns.tableHeaderProps()}
+                  >
                     {columns.render('title')}
                   </th>
                 ))}
