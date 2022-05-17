@@ -1,4 +1,4 @@
-import { HeaderGroupsProps, HeadersProps } from './props'
+import { HeaderGroupsProps, HeadersProps, SortColumnProps } from './props'
 
 export type MainHeaderColumn = {
   title: string
@@ -20,8 +20,11 @@ export type DatatableHeaderColumn = {
   title: string
   parent: string | undefined
   accessor: string | undefined
+  canSort: boolean
+  isSorted: boolean
   render: (accessor: string) => React.ReactNode
-  tableHeaderProps: () => HeadersProps
+  tableHeaderProps: (props: SortColumnProps) => HeadersProps
+  sortColumnProps?: () => SortColumnProps
 }
 
 export type DatatableHeader = DatatableHeaderColumn & {

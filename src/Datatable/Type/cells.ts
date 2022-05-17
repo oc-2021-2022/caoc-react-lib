@@ -5,6 +5,7 @@ export type CellValue = {
 }
 
 export type Cells = {
+  value: string
   render: () => React.ReactNode
   getCellProps: () => CellProps
 }
