@@ -1,5 +1,6 @@
+import { useFilter, useTable } from './Datatable'
+
 import { ExampleComponent } from './example/ExampleComponent'
 import { Modal } from './modal'
-import { useTable } from './Datatable'
 
-export { ExampleComponent, Modal, useTable }
+export { ExampleComponent, Modal, useTable, useFilter }

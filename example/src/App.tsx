@@ -1,11 +1,17 @@
-import { ExampleComponent, Modal, useTable } from 'caoc-react-lib'
+import {
+  DatatableHeader,
+  DatatableHeaderGroups
+} from '../../src/Datatable/Type/headers'
+import { ExampleComponent, Modal, useFilter, useTable } from 'caoc-react-lib'
 import React, { useMemo, useState } from 'react'
 
 import data from './data/shows'
 
 const App = (): JSX.Element => {
   const [open, setOpen] = useState(false)
-
+  const [number, setNumber] = useState(0)
+  const multiply = (a: number, b: number) => a * b
+  const result = useMemo(() => multiply(number, 2), [number])
   const columns = useMemo(
     () => [
       {
@@ -45,11 +51,17 @@ const App = (): JSX.Element => {
     ],
     []
   )
-  const { tableHeaders, rows } = useTable({ columns, data })
-  console.log(tableHeaders, rows)
+  const { tableHeaders, rows } = useTable({ columns, data }, useFilter)
+  console.log('rows', rows)
   return (
     <>
       <ExampleComponent text='Create React Library Example 😄 Michel' />
+
+      <div>
+        <h2>Memo</h2>
+        {result}
+        <button onClick={() => setNumber(number + 1)}>multiply</button>
+      </div>
 
       <div>
         <p>Modal</p>
@@ -68,42 +80,42 @@ const App = (): JSX.Element => {
 
       <div>
         <p>Datatable</p>
-        <table style={{ border: '3px solid black', borderSpacing: '0' }}>
+        <table
+          style={{
+            border: '3px solid black',
+            borderSpacing: '0',
+            margin: '1rem'
+          }}
+        >
           <thead>
-            {tableHeaders.map((headerGroups) => (
+            {tableHeaders.map((headerGroups: DatatableHeaderGroups) => (
               <tr {...headerGroups.tableHeaderGroupsProps()}>
-                {headerGroups.headers.map((columns) => (
-                  <th
-                    style={{
-                      border: '1px solid black',
-                      margin: '0',
-                      padding: '0.5rem'
-                    }}
-                    {...columns.tableHeaderProps()}
-                  >
-                    {columns.render('title')}
+                {headerGroups.headers.map((column: DatatableHeader) => (
+                  <th {...column.tableHeaderProps(column.sortColumnProps)}>
+                    {column.render('title')}
+                    <span>{column.canSort ? '🔼🔽' : ''}</span>
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
           <tbody>
-            {rows.map((row: any, i: number) => (
-              <tr key={i}>
-                {row.map((value: any, index: number) => (
+            {rows?.map((row: any) => (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell: any) => (
                   <td
+                    {...cell.getCellProps()}
                     style={{
                       border: '1px solid black',
                       margin: '0',
                       padding: '0.5rem'
                     }}
-                    key={index}
                   >
-                    {value}
+                    {cell.render()}
                   </td>
                 ))}
               </tr>
-            ))}
+            )) || []}
           </tbody>
         </table>
       </div>

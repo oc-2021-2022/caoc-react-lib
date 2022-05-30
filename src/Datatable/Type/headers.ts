@@ -10,6 +10,7 @@ export type HeaderColumn = {
   accessor?: string
 }
 
+// @TODO: Redundant type
 export type GenericColumn = {
   title: string
   accessor?: string
@@ -23,8 +24,8 @@ export type DatatableHeaderColumn = {
   canSort: boolean
   isSorted: boolean
   render: (accessor: string) => React.ReactNode
-  tableHeaderProps: (props: SortColumnProps) => HeadersProps
-  sortColumnProps?: () => SortColumnProps
+  tableHeaderProps: (props?: SortColumnProps) => HeadersProps
+  sortColumnProps: SortColumnProps
 }
 
 export type DatatableHeader = DatatableHeaderColumn & {

@@ -1,2 +1,2 @@
-export { useTable } from './Datatable'
+export { useFilter, useTable } from './hooks'
 export * from './Type'

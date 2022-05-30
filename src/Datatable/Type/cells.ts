@@ -12,6 +12,6 @@ export type Cells = {
 
 export type Row = {
   cells: Cells
-  values: CellValue | string[]
+  values: any
   getRowProps: () => RowProps
 }

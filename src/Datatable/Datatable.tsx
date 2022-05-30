@@ -1,34 +1,14 @@
 import {
-  CellValue,
   DatatableHeader,
   DatatableHeaderColumn,
   DatatableHeaderGroups,
   GenericColumn,
-  TDatatable
+  Row
 } from './Type'
-import { useEffect, useState } from 'react'
 
-export function useTable({ data, columns }: TDatatable): {
-  tableHeaders: DatatableHeaderGroups[]
-  rows: CellValue[]
-} {
-  const [tableHeaders, setTableHeader] = useState<DatatableHeaderGroups[]>([])
-  const [rows, setRows] = useState<CellValue[]>([])
+import { headerGroupUtils } from './utils/headerGroup'
 
-  useEffect(() => {
-    if (!tableHeaders.length) setTableHeader(generateHeader(columns))
-    if (!rows.length && tableHeaders.length)
-      setRows(generateCellGroups(data, tableHeaders))
-    return () => {}
-  }, [tableHeaders])
-  console.log(rows)
-  return {
-    tableHeaders,
-    rows
-  }
-}
-
-function generateHeader(
+export function generateHeader(
   headers: GenericColumn[],
   parent?: string
 ): DatatableHeaderGroups[] {
@@ -53,56 +33,83 @@ function generateHeader(
   ]
 }
 
-function generateHeaderGroups(
+export function generateHeaderGroups(
   header: GenericColumn,
-  parent?: string
+  parent?: string,
+  canSort: boolean = false
 ): DatatableHeader {
   const headerGroups: DatatableHeader = {
     title: '',
     parent,
     accessor: header.accessor,
-    render: function (accessor: string): React.ReactNode {
-      return header[accessor]
+    canSort: canSort,
+    isSorted: false,
+    render: () => {
+      return header.title
     },
-    tableHeaderProps: () => {
-      return {
-        key: header.title.toLowerCase(),
-        colSpan: headerGroups.columns?.length
-      }
-    }
+    tableHeaderProps: (props) => ({
+      key: header.title.toLowerCase(),
+      colSpan: headerGroups.columns?.length,
+      style: {
+        border: '1px solid black',
+        margin: '0',
+        padding: '0.5rem'
+      },
+      ...props
+    }),
+    sortColumnProps: {}
   }
 
   headerGroups.title = header.title
   if (header.columns)
-    headerGroups.columns = generateHeaderColumns(header.columns, header.title)
+    headerGroups.columns = header.columns.map((column: GenericColumn) =>
+      generateHeaderGroups(column, header.title, true)
+    )
 
   return headerGroups
 }
 
-function generateHeaderColumns(columns: GenericColumn[], parent: string) {
-  return columns.map((column: GenericColumn) =>
-    generateHeaderGroups(column, parent)
-  )
-}
-
-function generateCellGroups(
+export function generateRowGroups(
   data: any,
   headersGroup: DatatableHeaderGroups[]
-): CellValue[] {
-  const accessors = headersGroup
-    .map(({ headers }: DatatableHeaderGroups) => headers)
-    .flat()
-    .map(({ accessor }: DatatableHeaderColumn) => accessor)
-    .filter((accessor: string | undefined) => accessor !== undefined)
+): Row[] {
+  const accessors = headerGroupUtils(headersGroup).getAccessors
 
-  const cells = data.map((item: any) => {
-    // const values = {}
-    return accessors.map((accessor: string) => {
+  const rows: Row[] = data.map((item: any, index: number) => {
+    const result = {
+      values: {},
+      getRowProps: () => ({
+        key: `rows-${index}`
+      })
+    }
+
+    // eslint-disable-next-line dot-notation
+    result['cells'] = accessors.map((accessor: string) => {
       const [row, subrow] = accessor.split('.')
-      // values[accessor] = item[row][subrow]
-      return item[row][subrow]
+      const value = item[row][subrow]
+      const render = () => {
+        return value
+      }
+
+      const getCellProps = () => ({
+        key: `row-${index}-${value}`
+      })
+      return {
+        value,
+        render,
+        getCellProps
+      }
     })
-    // return values
+
+    result.values = accessors.map((accessor: string) => {
+      const values = {}
+      const [row, subrow] = accessor.split('.')
+      values[accessor] = item[row][subrow]
+      return values
+    })
+
+    return result
   })
-  return cells
+
+  return rows
 }
