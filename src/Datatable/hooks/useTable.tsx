@@ -23,7 +23,7 @@ export function useTable(
     [columns]
   )
 
-  const { sortData } = useFilter(tableHeaders, data)
+  const { sortData } = useFilter ? useFilter(tableHeaders, data) : []
 
   const rows = useMemo<Row[]>(() => {
     return generateRowGroups(data, tableHeaders)

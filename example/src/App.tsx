@@ -9,9 +9,7 @@ import data from './data/shows'
 
 const App = (): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const [number, setNumber] = useState(0)
-  const multiply = (a: number, b: number) => a * b
-  const result = useMemo(() => multiply(number, 2), [number])
+
   const columns = useMemo(
     () => [
       {
@@ -56,12 +54,6 @@ const App = (): JSX.Element => {
   return (
     <>
       <ExampleComponent text='Create React Library Example 😄 Michel' />
-
-      <div>
-        <h2>Memo</h2>
-        {result}
-        <button onClick={() => setNumber(number + 1)}>multiply</button>
-      </div>
 
       <div>
         <p>Modal</p>
