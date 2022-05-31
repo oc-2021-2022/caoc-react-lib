@@ -2,7 +2,13 @@ import {
   DatatableHeader,
   DatatableHeaderGroups
 } from '../../src/Datatable/Type/headers'
-import { ExampleComponent, Modal, useFilter, useTable } from 'caoc-react-lib'
+import {
+  ExampleComponent,
+  Modal,
+  useSearch,
+  useSort,
+  useTable
+} from 'caoc-react-lib'
 import React, { useMemo, useState } from 'react'
 
 import data from './data/shows'
@@ -49,8 +55,8 @@ const App = (): JSX.Element => {
     ],
     []
   )
-  const { tableHeaders, rows } = useTable({ columns, data }, useFilter)
-  console.log('rows', rows)
+  const { tableHeaders, rows } = useTable({ columns, data }, useSort, useSearch)
+
   return (
     <>
       <ExampleComponent text='Create React Library Example 😄 Michel' />
@@ -72,6 +78,7 @@ const App = (): JSX.Element => {
 
       <div>
         <p>Datatable</p>
+        <input type={'text'} value='' />
         <table
           style={{
             border: '3px solid black',

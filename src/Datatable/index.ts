@@ -1,2 +1,2 @@
-export { useFilter, useTable } from './hooks'
+export { useSearch, useSort, useTable } from './hooks'
 export * from './Type'

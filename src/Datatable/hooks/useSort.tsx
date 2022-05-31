@@ -5,7 +5,7 @@ import { headerGroupUtils } from '../utils/headerGroup'
 
 let sortOrder = 1
 
-export function useFilter(headers: DatatableHeaderGroups[], data: any) {
+export function useSort(headers: DatatableHeaderGroups[], data: any) {
   const [sortData, setSortData] = useState<any>([])
 
   const handleClick = useCallback((column: DatatableHeader) => {

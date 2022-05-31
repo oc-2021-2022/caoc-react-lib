@@ -16,14 +16,14 @@ export function useTable(
   tableHeaders: DatatableHeaderGroups[]
   rows: Row[]
 } {
-  const [useFilter] = hooks
+  const [useSort] = hooks
 
   const tableHeaders = useMemo<DatatableHeaderGroups[]>(
     () => generateHeader(columns),
     [columns]
   )
 
-  const { sortData } = useFilter ? useFilter(tableHeaders, data) : []
+  const { sortData } = useSort ? useSort(tableHeaders, data) : []
 
   const rows = useMemo<Row[]>(() => {
     return generateRowGroups(data, tableHeaders)
