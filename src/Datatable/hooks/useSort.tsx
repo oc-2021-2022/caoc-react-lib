@@ -3,8 +3,16 @@ import { useCallback, useState } from 'react'
 
 import { headerGroupUtils } from '../utils/headerGroup'
 
+// @TODO: Move this another place
 let sortOrder = 1
 
+/**
+ * It adds a `onClick` prop to each header column, and when the header column is clicked, it sorts the
+ * data by that column
+ * @param {DatatableHeaderGroups[]} headers - DatatableHeaderGroups[]
+ * @param {any} data - The data that you want to sort.
+ * @returns An object with a sortData property.
+ */
 export function useSort(headers: DatatableHeaderGroups[], data: any) {
   const [sortData, setSortData] = useState<any>([])
 
@@ -20,9 +28,15 @@ export function useSort(headers: DatatableHeaderGroups[], data: any) {
   }
 }
 
+/**
+ * It adds a `style` and `onClick` prop to the `sortColumnProps` of each column that can be sorted
+ * @param {DatatableHeaderGroups[]} headerGroup - DatatableHeaderGroups[] - This is the header group
+ * that you want to add the sort props to.
+ * @param handleClick - (column: DatatableHeader) => void
+ */
 function addSortPropsToHeaderColumn(
   headerGroup: DatatableHeaderGroups[],
-  handleClick: any
+  handleClick: (column: DatatableHeader) => void
 ): void {
   headerGroupUtils(headerGroup).getColumns.map((column: DatatableHeader) => {
     if (column.canSort) {
@@ -37,6 +51,12 @@ function addSortPropsToHeaderColumn(
   })
 }
 
+/**
+ * Sort the data by the column header, and then flip the sort order
+ * @param {DatatableHeader} column - DatatableHeader - The column header that was clicked
+ * @param {any} data - The data that you want to sort.
+ * @returns The sorted data
+ */
 function sortByHeader(column: DatatableHeader, data: any) {
   const [key, subkey] = (column.accessor as string).split('.')
   const sortedData = data.sort((a: any, b: any) => {
