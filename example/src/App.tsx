@@ -5,7 +5,7 @@ import {
 import {
   ExampleComponent,
   Modal,
-  useSearch,
+  usePagination,
   useSort,
   useTable
 } from 'caoc-react-lib'
@@ -55,7 +55,17 @@ const App = (): JSX.Element => {
     ],
     []
   )
-  const { tableHeaders, rows } = useTable({ columns, data }, useSort, useSearch)
+  const {
+    tableHeaders,
+    rows,
+    goToNextPage,
+    goToPreviousPage,
+    currentPage,
+    matrix,
+    goToPage,
+    updateLimit,
+    limit
+  } = useTable({ columns, data }, useSort, usePagination)
 
   return (
     <>
@@ -78,7 +88,6 @@ const App = (): JSX.Element => {
 
       <div>
         <p>Datatable</p>
-        <input type={'text'} value='' />
         <table
           style={{
             border: '3px solid black',
@@ -117,6 +126,32 @@ const App = (): JSX.Element => {
             )) || []}
           </tbody>
         </table>
+        <div>
+          <button onClick={goToPreviousPage}>previous</button>
+          {Array(matrix.length)
+            .fill('')
+            .map((_, i) => (
+              <button
+                key={`navigate_button_${i}`}
+                onClick={() => goToPage(i)}
+                disabled={currentPage === i}
+              >
+                {i + 1}
+              </button>
+            ))}
+          <button onClick={goToNextPage}>next</button>
+          <select
+            onChange={({ target }) => updateLimit(parseInt(target.value))}
+            value={limit}
+          >
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+            <option value='10'>10</option>
+          </select>
+        </div>
       </div>
     </>
   )
