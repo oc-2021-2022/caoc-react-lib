@@ -9,14 +9,8 @@ import { useMemo } from 'react'
  * @param {TDatatable}  - TDatatable
  * @returns An object with two properties: tableHeaders and rows.
  */
-export function useTable(
-  { data, columns }: TDatatable,
-  ...hooks: any
-): {
-  tableHeaders: DatatableHeaderGroups[]
-  rows: Row[]
-} {
-  const [useSort] = hooks
+export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
+  const [useSort, usePagination] = hooks
 
   const tableHeaders = useMemo<DatatableHeaderGroups[]>(
     () => generateHeader(columns),
@@ -25,12 +19,29 @@ export function useTable(
 
   const { sortData } = useSort ? useSort(tableHeaders, data) : []
 
+  const {
+    matrix,
+    goToPage,
+    currentPage,
+    goToNextPage,
+    goToPreviousPage,
+    updateLimit,
+    limit
+  } = usePagination ? usePagination(sortData || data) : []
+
   const rows = useMemo<Row[]>(() => {
-    return generateRowGroups(data, tableHeaders)
-  }, [sortData])
+    return generateRowGroups(matrix[currentPage] || data, tableHeaders)
+  }, [sortData, matrix[currentPage]])
 
   return {
     tableHeaders,
-    rows
+    rows,
+    matrix,
+    goToNextPage,
+    currentPage,
+    goToPreviousPage,
+    goToPage,
+    updateLimit,
+    limit
   }
 }
