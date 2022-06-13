@@ -14,7 +14,7 @@ let sortOrder = 1
  * @returns An object with a sortData property.
  */
 export function useSort(headers: DatatableHeaderGroups[], data: any) {
-  const [sortData, setSortData] = useState<any>([])
+  const [sortData, setSortData] = useState<any>(data)
 
   const handleClick = useCallback((column: DatatableHeader) => {
     const dataSorted = [...sortByHeader(column, data)]
