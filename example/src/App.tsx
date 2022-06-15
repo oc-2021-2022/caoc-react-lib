@@ -6,6 +6,7 @@ import {
   ExampleComponent,
   Modal,
   usePagination,
+  useSearch,
   useSort,
   useTable
 } from 'caoc-react-lib'
@@ -64,8 +65,9 @@ const App = (): JSX.Element => {
     matrix,
     goToPage,
     updateLimit,
-    limit
-  } = useTable({ columns, data }, useSort, usePagination)
+    limit,
+    searchTherm
+  } = useTable({ columns, data }, useSort, usePagination, useSearch)
 
   return (
     <>
@@ -86,13 +88,18 @@ const App = (): JSX.Element => {
         )}
       </div>
 
-      <div>
+      <div style={{ margin: '1rem' }}>
         <p>Datatable</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <p>Search: </p>
+          <div>
+            <input type='text' onChange={searchTherm} />
+          </div>
+        </div>
         <table
           style={{
             border: '3px solid black',
-            borderSpacing: '0',
-            margin: '1rem'
+            borderSpacing: '0'
           }}
         >
           <thead>

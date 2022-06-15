@@ -10,7 +10,7 @@ import { useMemo } from 'react'
  * @returns An object with two properties: tableHeaders and rows.
  */
 export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
-  const [useSort, usePagination] = hooks
+  const [useSort, usePagination, useSearch] = hooks
 
   const tableHeaders = useMemo<DatatableHeaderGroups[]>(
     () => generateHeader(columns),
@@ -18,6 +18,10 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
   )
 
   const { sortData } = useSort ? useSort(tableHeaders, data) : []
+
+  const { searchTherm, searchArray } = useSearch
+    ? useSearch(sortData || data)
+    : []
 
   const {
     matrix,
@@ -27,11 +31,11 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     goToPreviousPage,
     updateLimit,
     limit
-  } = usePagination ? usePagination(sortData || data) : []
+  } = usePagination ? usePagination(searchArray || data) : []
 
   const rows = useMemo<Row[]>(() => {
     return generateRowGroups(matrix[currentPage] || data, tableHeaders)
-  }, [sortData, matrix[currentPage]])
+  }, [sortData, searchArray, matrix[currentPage]])
 
   return {
     tableHeaders,
@@ -42,6 +46,7 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     goToPreviousPage,
     goToPage,
     updateLimit,
-    limit
+    limit,
+    searchTherm
   }
 }
