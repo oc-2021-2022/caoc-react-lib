@@ -8,7 +8,7 @@ import toMatrix from '../utils/toMatrix'
  * @param {any} data - any[] - the data you want to paginate
  */
 export function usePagination(data: any) {
-  const [limit, setLimit] = useState<number>(10)
+  const [limit, setLimit] = useState<number>(5)
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [matrix, setMatrix] = useState(toMatrix(data, limit))
 
