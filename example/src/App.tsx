@@ -12,50 +12,57 @@ import {
 } from 'caoc-react-lib'
 import React, { useMemo, useState } from 'react'
 
-import data from './data/shows'
+import { employees } from './data/employees'
 
 const App = (): JSX.Element => {
   const [open, setOpen] = useState(false)
-
   const columns = useMemo(
     () => [
       {
-        title: 'TV Show',
+        title: 'Employees',
         columns: [
           {
-            title: 'Name',
-            accessor: 'show.name'
+            title: 'First Name',
+            accessor: 'firstName'
           },
           {
-            title: 'Type',
-            accessor: 'show.type'
-          }
-        ]
-      },
-      {
-        title: 'Type',
-        columns: [
-          {
-            title: 'Language',
-            accessor: 'show.language'
+            title: 'lastName',
+            accessor: 'lastName'
           },
           {
-            title: 'Genre(s)',
-            accessor: 'show.genres'
+            title: 'Birthdate',
+            accessor: 'dateOfBirth'
           },
           {
-            title: 'Runtime',
-            accessor: 'show.runtime'
+            title: 'Start Date',
+            accessor: 'startDate'
           },
           {
-            title: 'Status',
-            accessor: 'show.status'
+            title: 'Departement',
+            accessor: 'department'
+          },
+          {
+            title: 'Street',
+            accessor: 'street'
+          },
+          {
+            title: 'City',
+            accessor: 'city'
+          },
+          {
+            title: 'State',
+            accessor: 'state'
+          },
+          {
+            title: 'Zip Code',
+            accessor: 'zipCode'
           }
         ]
       }
     ],
     []
   )
+
   const {
     tableHeaders,
     rows,
@@ -67,7 +74,7 @@ const App = (): JSX.Element => {
     updateLimit,
     limit,
     searchTherm
-  } = useTable({ columns, data }, useSort, usePagination, useSearch)
+  } = useTable({ columns, data: employees }, useSort, usePagination, useSearch)
 
   return (
     <>

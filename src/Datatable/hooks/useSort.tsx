@@ -16,10 +16,13 @@ let sortOrder = 1
 export function useSort(headers: DatatableHeaderGroups[], data: any) {
   const [sortData, setSortData] = useState<any>(data)
 
-  const handleClick = useCallback((column: DatatableHeader) => {
-    const dataSorted = [...sortByHeader(column, data)]
-    setSortData(dataSorted)
-  }, [])
+  const handleClick = useCallback(
+    (column: DatatableHeader) => {
+      const dataSorted = [...sortByHeader(column, data)]
+      setSortData(dataSorted)
+    },
+    [data]
+  )
 
   addSortPropsToHeaderColumn(headers, handleClick)
 

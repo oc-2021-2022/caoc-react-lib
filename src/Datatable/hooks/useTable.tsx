@@ -17,11 +17,13 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     [columns]
   )
 
-  const { sortData } = useSort ? useSort(tableHeaders, data) : []
+  const { searchTherm, searchArray } = useSearch ? useSearch(data) : []
+  let { sortData } = useSort ? useSort(tableHeaders, data) : []
 
-  const { searchTherm, searchArray } = useSearch
-    ? useSearch(sortData || data)
-    : []
+  const dataRow = useMemo(() => {
+    sortData = [...searchArray]
+    return sortData
+  }, [searchArray, sortData])
 
   const {
     matrix,
@@ -31,11 +33,11 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     goToPreviousPage,
     updateLimit,
     limit
-  } = usePagination ? usePagination(searchArray || data) : []
+  } = usePagination ? usePagination(dataRow || data) : []
 
   const rows = useMemo<Row[]>(() => {
-    return generateRowGroups(matrix[currentPage] || data, tableHeaders)
-  }, [sortData, searchArray, matrix[currentPage]])
+    return generateRowGroups(matrix[currentPage] || [], tableHeaders)
+  }, [dataRow, matrix[currentPage]])
 
   return {
     tableHeaders,

@@ -13,9 +13,9 @@ export function useSearch(data: any) {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const terms = event.target.value.split(' ')
       const result = [
-        ...data.filter(({ show }: any) => {
+        ...data.filter((data: any) => {
           return terms.every((term) =>
-            Object.values(show).some((value: any) =>
+            Object.values(data).some((value: any) =>
               searchDispatcher(
                 value,
                 term.replace(/^\w/, (c) => c.toUpperCase())
