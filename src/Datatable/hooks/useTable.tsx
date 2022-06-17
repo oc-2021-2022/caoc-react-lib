@@ -18,14 +18,6 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
   const [dataRow, setDataRow] = useState([])
   const { searchTherm, searchArray } = useSearch ? useSearch(data) : []
   const { sortData } = useSort ? useSort(tableHeaders, data) : []
-
-  useEffect(() => {
-    setDataRow(searchArray)
-  }, [searchArray])
-  useEffect(() => {
-    setDataRow(sortData)
-  }, [sortData])
-
   const {
     matrix,
     goToPage,
@@ -35,6 +27,16 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     updateLimit,
     limit
   } = usePagination ? usePagination(dataRow || data) : []
+
+  /*
+    Try to find another way for this s...
+  */
+  useEffect(() => {
+    setDataRow(searchArray)
+  }, [searchArray])
+  useEffect(() => {
+    setDataRow(sortData)
+  }, [sortData])
 
   const rows = useMemo<Row[]>(() => {
     return generateRowGroups(matrix[currentPage] || [], tableHeaders)

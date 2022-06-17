@@ -141,7 +141,9 @@ const App = (): JSX.Element => {
           </tbody>
         </table>
         <div>
-          <button onClick={goToPreviousPage}>previous</button>
+          <button onClick={goToPreviousPage} disabled={currentPage <= 0}>
+            previous
+          </button>
           {Array(matrix.length)
             .fill('')
             .map((_, i) => (
@@ -153,7 +155,12 @@ const App = (): JSX.Element => {
                 {i + 1}
               </button>
             ))}
-          <button onClick={goToNextPage}>next</button>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage >= matrix.length - 1}
+          >
+            next
+          </button>
           <select
             onChange={({ target }) => updateLimit(parseInt(target.value))}
             value={limit}
