@@ -25,7 +25,8 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     goToNextPage,
     goToPreviousPage,
     updateLimit,
-    limit
+    limit,
+    limitArray
   } = usePagination ? usePagination(dataRow || data) : []
 
   /*
@@ -52,6 +53,7 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     goToPage,
     updateLimit,
     limit,
+    limitArray,
     searchTherm
   }
 }

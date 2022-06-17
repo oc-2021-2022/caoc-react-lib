@@ -73,6 +73,7 @@ const App = (): JSX.Element => {
     goToPage,
     updateLimit,
     limit,
+    limitArray,
     searchTherm
   } = useTable({ columns, data: employees }, useSort, usePagination, useSearch)
 
@@ -165,8 +166,11 @@ const App = (): JSX.Element => {
             onChange={({ target }) => updateLimit(parseInt(target.value))}
             value={limit}
           >
-            <option value='5'>5</option>
-            <option value='10'>10</option>
+            {limitArray.map((l: number) => (
+              <option key={`limit_select_${l}`} value={l}>
+                {l}
+              </option>
+            ))}
           </select>
         </div>
       </div>
