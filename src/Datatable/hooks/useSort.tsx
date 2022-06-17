@@ -1,4 +1,4 @@
-import { DatatableHeader, DatatableHeaderGroups } from '../Type'
+import { DatatableHeader, DatatableHeaderGroups, Sort } from '../Type'
 import { useCallback, useState } from 'react'
 
 import { headerGroupUtils } from '../utils/headerGroup'
@@ -13,7 +13,7 @@ let sortOrder = 1
  * @param {any} data - The data that you want to sort.
  * @returns An object with a sortData property.
  */
-export function useSort(headers: DatatableHeaderGroups[], data: any) {
+export function useSort(headers: DatatableHeaderGroups[], data: any): Sort {
   const [sortData, setSortData] = useState<any>(data)
 
   const handleClick = useCallback(

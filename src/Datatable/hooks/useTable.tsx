@@ -1,4 +1,10 @@
-import { DatatableHeaderGroups, Row, TDatatable } from '../Type'
+import {
+  DatatableHeaderGroups,
+  Pagination,
+  Row,
+  Search,
+  TDatatable
+} from '../Type'
 import { generateHeader, generateRowGroups } from '../Datatable'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -9,13 +15,45 @@ import { useEffect, useMemo, useState } from 'react'
  * @returns An object with two properties: tableHeaders and rows.
  */
 export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
-  const [useSort, usePagination, useSearch] = hooks
-
   const tableHeaders = useMemo<DatatableHeaderGroups[]>(
     () => generateHeader(columns),
     [columns]
   )
-  const [dataRow, setDataRow] = useState([])
+  const { dataRow, hooksFn, deps } = hookOrchestrator(data, tableHeaders, hooks)
+
+  const rows = useMemo<Row[]>(() => {
+    return generateRowGroups(
+      Array.isArray(dataRow[0]) ? dataRow[hooksFn.currentPage] : dataRow,
+      tableHeaders
+    )
+  }, [dataRow, deps])
+
+  return {
+    tableHeaders,
+    rows,
+    ...hooksFn
+  }
+}
+
+/**
+ * It takes in data, tableHeaders, and hooks, and returns dataRow, hooksFn, and deps
+ * @param {any} data - any,
+ * @param {DatatableHeaderGroups[]} tableHeaders - DatatableHeaderGroups[]
+ * @param hooks - [useSort, usePagination, useSearch]
+ * @returns An object with the following properties:
+ */
+function hookOrchestrator(
+  data: any,
+  tableHeaders: DatatableHeaderGroups[],
+  hooks: [any, any, any]
+): {
+  dataRow: any[]
+  hooksFn: Pagination & Omit<Search, 'searchArray'>
+  deps: any[]
+} {
+  const [useSort, usePagination, useSearch] = hooks
+
+  const [dataRow, setDataRow] = useState(data)
   const { searchTherm, searchArray } = useSearch ? useSearch(data) : []
   const { sortData } = useSort ? useSort(tableHeaders, data) : []
   const {
@@ -27,7 +65,7 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     updateLimit,
     limit,
     limitArray
-  } = usePagination ? usePagination(dataRow || data) : []
+  } = usePagination ? usePagination(data) : []
 
   /*
     Try to find another way for this s...
@@ -35,25 +73,30 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
   useEffect(() => {
     setDataRow(searchArray)
   }, [searchArray])
+
   useEffect(() => {
     setDataRow(sortData)
   }, [sortData])
 
-  const rows = useMemo<Row[]>(() => {
-    return generateRowGroups(matrix[currentPage] || [], tableHeaders)
-  }, [dataRow, matrix[currentPage]])
+  useEffect(() => {
+    if (matrix.length) {
+      setDataRow(matrix)
+    }
+  }, [matrix])
 
   return {
-    tableHeaders,
-    rows,
-    matrix,
-    goToNextPage,
-    currentPage,
-    goToPreviousPage,
-    goToPage,
-    updateLimit,
-    limit,
-    limitArray,
-    searchTherm
+    dataRow,
+    hooksFn: {
+      matrix,
+      goToPage,
+      currentPage,
+      goToNextPage,
+      goToPreviousPage,
+      updateLimit,
+      limit,
+      limitArray,
+      searchTherm
+    },
+    deps: [matrix[currentPage]]
   }
 }

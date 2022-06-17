@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { Pagination } from '../Type'
 import toMatrix from '../utils/toMatrix'
 
 /**
@@ -7,7 +8,7 @@ import toMatrix from '../utils/toMatrix'
  * through the data
  * @param {any} data - any[] - the data you want to paginate
  */
-export function usePagination(data: any) {
+export function usePagination(data: any): Pagination {
   const limitArray = [5, 10, 20, 50, 100]
   const [limit, setLimit] = useState<number>(limitArray[0])
   const [currentPage, setCurrentPage] = useState<number>(0)

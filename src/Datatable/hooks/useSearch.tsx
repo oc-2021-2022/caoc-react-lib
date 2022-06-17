@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react'
 
+import { Search } from '../Type'
+
 /**
  * It takes in an array of objects, and returns a filtered array of objects based on the search term
  * @param {any} data - any - this is the data that you want to search through.
  * @returns An object with two properties: searchArray and searchTherm.
  */
-export function useSearch(data: any) {
+export function useSearch(data: any): Search {
   const [searchArray, setSearchArray] = useState<any[]>(data)
 
   /* A callback function that takes an event as a parameter, and returns a filtered array of objects. */

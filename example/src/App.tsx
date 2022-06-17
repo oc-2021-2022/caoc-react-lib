@@ -3,7 +3,6 @@ import {
   DatatableHeaderGroups
 } from '../../src/Datatable/Type/headers'
 import {
-  ExampleComponent,
   Modal,
   usePagination,
   useSearch,
@@ -79,8 +78,6 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <ExampleComponent text='Create React Library Example 😄 Michel' />
-
       <div>
         <p>Modal</p>
         <button onClick={() => setOpen(true)}>Open Modal</button>
