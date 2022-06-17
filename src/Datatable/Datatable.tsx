@@ -86,7 +86,7 @@ export function generateRowGroups(
     // eslint-disable-next-line dot-notation
     result['cells'] = accessors.map((accessor: string) => {
       const [row, subrow] = accessor.split('.')
-      const value = item[row][subrow]
+      const value = row && subrow ? item[row][subrow] : item[row]
       const render = () => {
         return value
       }
@@ -104,7 +104,7 @@ export function generateRowGroups(
     result.values = accessors.map((accessor: string) => {
       const values = {}
       const [row, subrow] = accessor.split('.')
-      values[accessor] = item[row][subrow]
+      values[accessor] = row && subrow ? item[row][subrow] : item[row]
       return values
     })
 

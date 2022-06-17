@@ -58,12 +58,14 @@ function addSortPropsToHeaderColumn(
  * @returns The sorted data
  */
 function sortByHeader(column: DatatableHeader, data: any) {
-  const [key, subkey] = (column.accessor as string).split('.')
+  const [row, subrow] = (column.accessor as string).split('.')
   const sortedData = data.sort((a: any, b: any) => {
-    if (a[key][subkey] > b[key][subkey]) {
+    const aRow = row && subrow ? a[row][subrow] : a[row]
+    const bRow = row && subrow ? b[row][subrow] : b[row]
+    if (aRow > bRow) {
       return 1 * sortOrder
     }
-    if (a[key][subkey] < b[key][subkey]) {
+    if (aRow < bRow) {
       return -1 * sortOrder
     }
     return 0
