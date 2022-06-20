@@ -13,6 +13,7 @@ export function usePagination(data: any): Pagination {
   const [limit, setLimit] = useState<number>(limitArray[0])
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [matrix, setMatrix] = useState(toMatrix(data, limit))
+
   useEffect(() => {
     const newDataMatrix = [...toMatrix(data, limit)]
     setMatrix(newDataMatrix)

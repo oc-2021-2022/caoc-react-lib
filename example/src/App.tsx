@@ -74,7 +74,7 @@ const App = (): JSX.Element => {
     limit,
     limitArray,
     searchTherm
-  } = useTable({ columns, data: employees }, useSort, usePagination, useSearch)
+  } = useTable({ columns, data: employees }, useSort, useSearch, usePagination)
 
   return (
     <>
@@ -100,6 +100,38 @@ const App = (): JSX.Element => {
           <div>
             <input type='text' onChange={searchTherm} />
           </div>
+        </div>
+        <div>
+          <button onClick={goToPreviousPage} disabled={currentPage <= 0}>
+            previous
+          </button>
+          {Array(matrix.length)
+            .fill('')
+            .map((_, i) => (
+              <button
+                key={`navigate_button_${i}`}
+                onClick={() => goToPage(i)}
+                disabled={currentPage === i}
+              >
+                {i + 1}
+              </button>
+            ))}
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage >= matrix.length - 1}
+          >
+            next
+          </button>
+          <select
+            onChange={({ target }) => updateLimit(parseInt(target.value))}
+            value={limit}
+          >
+            {limitArray.map((l: number) => (
+              <option key={`limit_select_${l}`} value={l}>
+                {l}
+              </option>
+            ))}
+          </select>
         </div>
         <table
           style={{
@@ -138,38 +170,6 @@ const App = (): JSX.Element => {
             )) || []}
           </tbody>
         </table>
-        <div>
-          <button onClick={goToPreviousPage} disabled={currentPage <= 0}>
-            previous
-          </button>
-          {Array(matrix.length)
-            .fill('')
-            .map((_, i) => (
-              <button
-                key={`navigate_button_${i}`}
-                onClick={() => goToPage(i)}
-                disabled={currentPage === i}
-              >
-                {i + 1}
-              </button>
-            ))}
-          <button
-            onClick={goToNextPage}
-            disabled={currentPage >= matrix.length - 1}
-          >
-            next
-          </button>
-          <select
-            onChange={({ target }) => updateLimit(parseInt(target.value))}
-            value={limit}
-          >
-            {limitArray.map((l: number) => (
-              <option key={`limit_select_${l}`} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
     </>
   )
