@@ -9,12 +9,14 @@ import { generateHeader, generateRowGroups } from '../Datatable'
 import { useEffect, useMemo, useState } from 'react'
 
 /**
- * It takes in an array of columns and an array of data and returns an array of table headers and an
- * array of rows
- * @param {TDatatable}  - TDatatable
- * @returns An object with two properties: tableHeaders and rows.
+ * It takes in data and columns, and returns a tableHeaders, rows, and hooksFn
+ * @param {TDatatable}  - TDatatable - the props that are passed to the datatable component
+ * @param {Function[]} hooks - Array of hooks that will be used to manipulate the data.
  */
-export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
+export function useTable(
+  { data, columns }: TDatatable,
+  ...hooks: Function[]
+): any {
   const tableHeaders = useMemo<DatatableHeaderGroups[]>(
     () => generateHeader(columns),
     [columns]
@@ -37,16 +39,15 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
 }
 
 /**
- * It takes in data, tableHeaders, and hooks, and returns dataRow, hooksFn, and deps
- * @param {any} data - any,
+ * It takes in data, table headers, and hooks, and returns a dataRow, hooksFn, and deps
+ * @param {any} data - any - the data you want to manipulate
  * @param {DatatableHeaderGroups[]} tableHeaders - DatatableHeaderGroups[]
- * @param hooks - [useSort, usePagination, useSearch]
- * @returns An object with the following properties:
+ * @param {Function[]} hooks - Function[]
  */
 function hookOrchestrator(
   data: any,
   tableHeaders: DatatableHeaderGroups[],
-  hooks: any
+  hooks: Function[]
 ): {
   dataRow: any[]
   hooksFn: Pagination & Omit<Search, 'searchArray'>
