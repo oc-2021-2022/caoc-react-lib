@@ -73,7 +73,7 @@ const App = (): JSX.Element => {
     updateLimit,
     limit,
     limitArray,
-    searchTherm
+    handleSearch
   } = useTable({ columns, data: employees }, useSort, useSearch, usePagination)
 
   return (
@@ -98,7 +98,7 @@ const App = (): JSX.Element => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <p>Search: </p>
           <div>
-            <input type='text' onChange={searchTherm} />
+            <input type='text' onChange={handleSearch} />
           </div>
         </div>
         <div>
