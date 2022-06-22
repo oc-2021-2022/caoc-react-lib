@@ -8,6 +8,20 @@ import {
 
 import { headerGroupUtils } from './utils/headerGroup'
 
+/**
+ * It takes a list of columns and returns a list of header groups
+ * @param {GenericColumn[]} headers - GenericColumn[]
+ * @param {string} [parent] - The parent column name. This is used to generate the header groups.
+ * @returns An array of objects with the following properties:
+ *   - headers: an array of objects with the following properties:
+ *     - key: a string
+ *     - label: a string
+ *     - props: an object with the following properties:
+ *       - key: a string
+ *       - className: a string
+ *       - style: an object with the following properties:
+ *         - width
+ */
 export function generateHeader(
   headers: GenericColumn[],
   parent?: string
@@ -33,6 +47,23 @@ export function generateHeader(
   ]
 }
 
+/**
+ * It takes a header object, and returns a header object with the same properties, but with the
+ * addition of a `columns` property, which is an array of header objects
+ * @param {GenericColumn} header - GenericColumn - This is the header object that we're going to be
+ * generating the header groups for.
+ * @param {string} [parent] - This is the parent header of the current header.
+ * @param {boolean} [canSort=false] - boolean = false
+ * @returns An array of objects with the following properties:
+ *   title: string
+ *   parent: string
+ *   accessor: string
+ *   canSort: boolean
+ *   isSorted: boolean
+ *   render: function
+ *   tableHeaderProps: function
+ *   sortColumnProps: object
+ */
 export function generateHeaderGroups(
   header: GenericColumn,
   parent?: string,
@@ -69,6 +100,12 @@ export function generateHeaderGroups(
   return headerGroups
 }
 
+/**
+ * It takes an array of objects and an array of headers and returns an array of rows
+ * @param {any} data - any,
+ * @param {DatatableHeaderGroups[]} headersGroup - DatatableHeaderGroups[]
+ * @returns An array of objects.
+ */
 export function generateRowGroups(
   data: any,
   headersGroup: DatatableHeaderGroups[]
