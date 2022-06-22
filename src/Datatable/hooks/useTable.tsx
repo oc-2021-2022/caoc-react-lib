@@ -19,6 +19,7 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
     () => generateHeader(columns),
     [columns]
   )
+
   const { dataRow, hooksFn, deps } = hookOrchestrator(data, tableHeaders, hooks)
 
   const rows = useMemo<Row[]>(() => {
@@ -45,61 +46,55 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
 function hookOrchestrator(
   data: any,
   tableHeaders: DatatableHeaderGroups[],
-  hooks: Function[]
+  hooks: any
 ): {
   dataRow: any[]
   hooksFn: Pagination & Omit<Search, 'searchArray'>
   deps: any
 } {
-  const [useSort, useSearch, usePagination] = hooks
+  const deps = []
 
-  const dataDeps = []
+  const { useSort, useSearch, usePagination } = hooks.reduce(
+    (a: any, v: any) => ({ ...a, [v.name]: v }),
+    {}
+  )
   const [dataRow, setDataRow] = useState<any[]>([])
 
-  const search = useSearch(data)
-  const sort = useSort(tableHeaders, search?.searchArray || data, [
-    search?.searchArray
-  ])
+  const search = useSearch ? useSearch(data) : {}
 
-  if (search.searchArray) {
-    dataDeps.push(search.searchArray, sort.sortData)
-  }
-
-  const {
-    matrix,
-    goToPage,
-    currentPage,
-    goToNextPage,
-    goToPreviousPage,
-    updateLimit,
-    limit,
-    limitArray
-  } = usePagination
-    ? usePagination(search?.searchArray.length ? search.searchArray : data)
+  const sort = useSort
+    ? useSort(tableHeaders, search?.searchArray || data, [search?.searchArray])
+    : {}
+  const paginate = usePagination
+    ? usePagination(search?.searchArray || data, [
+        search?.searchArray,
+        sort?.sortData
+      ])
     : []
 
-  if (matrix) {
-    dataDeps.push(limit, matrix[currentPage])
-  }
+  if (search.searchArray) deps.push(search.searchArray)
+  if (sort.sortData) deps.push(sort.sortData)
+  if (paginate.matrix && paginate.limit && paginate.current)
+    deps.push(paginate.limit, paginate.matrix[paginate.current])
 
   useEffect(() => {
-    if (matrix && matrix.length) setDataRow(matrix)
+    if (paginate.matrix) setDataRow(paginate?.matrix)
     else setDataRow(search?.searchArray || data)
-  }, [data, ...dataDeps])
+  }, [data, ...deps])
 
   return {
     dataRow,
     hooksFn: {
-      matrix,
-      goToPage,
-      currentPage,
-      goToNextPage,
-      goToPreviousPage,
-      updateLimit,
-      limit,
-      limitArray,
+      matrix: paginate?.matrix,
+      goToPage: paginate?.goToPage,
+      currentPage: paginate?.currentPage,
+      goToNextPage: paginate?.goToNextPage,
+      goToPreviousPage: paginate?.goToPreviousPage,
+      updateLimit: paginate?.updateLimit,
+      limit: paginate?.limit,
+      limitArray: paginate?.limitArray,
       handleSearch: search?.handleSearch
     },
-    deps: dataDeps
+    deps
   }
 }
