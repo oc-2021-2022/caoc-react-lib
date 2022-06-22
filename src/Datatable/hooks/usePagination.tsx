@@ -14,11 +14,6 @@ export function usePagination(data: any): Pagination {
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [matrix, setMatrix] = useState(toMatrix(data, limit))
 
-  useEffect(() => {
-    const newDataMatrix = [...toMatrix(data, limit)]
-    setMatrix(newDataMatrix)
-  }, [limit, data])
-
   /**
    * `goToPage` takes a number as an argument and returns an array of objects or undefined
    * @param {number} page - number - the page number you want to go to
@@ -55,6 +50,12 @@ export function usePagination(data: any): Pagination {
     goToPage(0)
     setLimit(newLimit)
   }
+
+  useEffect(() => {
+    const newDataMatrix = [...toMatrix(data, limit)]
+    if (currentPage > newDataMatrix.length) goToPage(0)
+    setMatrix(newDataMatrix)
+  }, [limit, data])
 
   return {
     matrix,
