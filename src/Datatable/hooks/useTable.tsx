@@ -52,25 +52,18 @@ function hookOrchestrator(
   deps: any
 } {
   const [useSort, useSearch, usePagination] = hooks
-  const [dataRow, setDataRow] = useState([])
 
-  const { sortData } = useSort ? useSort(tableHeaders, data) : []
-  const { searchTherm, searchArray } = useSearch ? useSearch(data) : []
+  const dataDeps = []
+  const [dataRow, setDataRow] = useState<any[]>([])
 
-  const filteredData = useMemo(() => {
-    if (searchArray && searchArray.length) {
-      return searchArray
-    }
-    if (
-      sortData &&
-      sortData.length &&
-      (JSON.stringify(sortData[0]) !== JSON.stringify(dataRow[0][0]) ||
-        JSON.stringify(sortData[0]) !== JSON.stringify(dataRow[0]))
-    ) {
-      return sortData
-    }
-    return data
-  }, [searchArray, sortData])
+  const search = useSearch(data)
+  const sort = useSort(tableHeaders, search?.searchArray || data, [
+    search?.searchArray
+  ])
+
+  if (search.searchArray) {
+    dataDeps.push(search.searchArray, sort.sortData)
+  }
 
   const {
     matrix,
@@ -81,14 +74,18 @@ function hookOrchestrator(
     updateLimit,
     limit,
     limitArray
-  } = usePagination ? usePagination(filteredData || data) : []
+  } = usePagination
+    ? usePagination(search?.searchArray.length ? search.searchArray : data)
+    : []
 
-  const matrixDeps = matrix ? [limit, matrix[currentPage]] : []
+  if (matrix) {
+    dataDeps.push(limit, matrix[currentPage])
+  }
 
   useEffect(() => {
     if (matrix && matrix.length) setDataRow(matrix)
-    else setDataRow(filteredData)
-  }, [filteredData, ...matrixDeps])
+    else setDataRow(search?.searchArray || data)
+  }, [data, ...dataDeps])
 
   return {
     dataRow,
@@ -101,8 +98,8 @@ function hookOrchestrator(
       updateLimit,
       limit,
       limitArray,
-      searchTherm
+      handleSearch: search?.handleSearch
     },
-    deps: matrixDeps
+    deps: dataDeps
   }
 }
