@@ -45,7 +45,7 @@ export function useTable({ data, columns }: TDatatable, ...hooks: any): any {
 function hookOrchestrator(
   data: any,
   tableHeaders: DatatableHeaderGroups[],
-  hooks: [any, any, any]
+  hooks: Function[]
 ): {
   dataRow: any[]
   hooksFn: Pagination & Omit<Search, 'searchArray'>
