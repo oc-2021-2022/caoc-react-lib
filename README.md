@@ -18,6 +18,7 @@ A modal box that will use ReactDOM.createPortal to display it.
 ```tsx
 import  { Modal } from 'caoc-react-lib'
 import React, {useState} from 'React'
+
 const App = () => {
   const [openModal, setOpenModal] = useState(false)
   return (
