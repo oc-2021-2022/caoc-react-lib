@@ -74,11 +74,9 @@ function hookOrchestrator(
     : {}
 
   useEffect(() => {
-    console.log(paginate)
     if (paginate.matrix) setDataRow(paginate.matrix)
     else setDataRow(tempData)
   }, [tempData, paginate?.matrix])
-  console.log(dataRow, tempData)
 
   return {
     dataRow,
