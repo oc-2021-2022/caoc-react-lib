@@ -13,7 +13,7 @@ npm install --save caoc-react-lib
 ## Usage
 ### **Modal**
 
-A modal box that will use ReactDOM.createPortal to display it.
+A modal box that will use `ReactDOM.createPortal` to display it.
 
 ```tsx
 import  { Modal } from 'caoc-react-lib'
@@ -275,17 +275,6 @@ const App = () => {
         <button onClick={goToPreviousPage} disabled={currentPage <= 0}>
           previous
         </button>
-        {Array(matrix.length)
-          .fill('')
-          .map((_, i) => (
-            <button
-              key={`navigate_button_${i}`}
-              onClick={() => goToPage(i)}
-              disabled={currentPage === i}
-            >
-              {i + 1}
-            </button>
-          ))}
         <button
           onClick={goToNextPage}
           disabled={currentPage >= matrix.length - 1}
@@ -302,6 +291,26 @@ const App = () => {
             </option>
           ))}
         </select>
+        <div>
+          go to
+          <select
+            id=''
+            onChange={({ target }) => goToPage(parseInt(target.value))}
+          >
+            {Array(matrix.length)
+              .fill('')
+              .map((_, i) => (
+                <option
+                  selected={currentPage === i}
+                  key={`select_page_${i}`}
+                  value={i}
+                >
+                  {i + 1}
+                </option>
+              ))}
+          </select>
+          page
+        </div>
       </div>
       <table>
         <thead>
