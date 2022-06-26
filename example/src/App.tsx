@@ -105,17 +105,7 @@ const App = (): JSX.Element => {
           <button onClick={goToPreviousPage} disabled={currentPage <= 0}>
             previous
           </button>
-          {Array(matrix.length)
-            .fill('')
-            .map((_, i) => (
-              <button
-                key={`navigate_button_${i}`}
-                onClick={() => goToPage(i)}
-                disabled={currentPage === i}
-              >
-                {i + 1}
-              </button>
-            ))}
+          page {currentPage + 1} of {matrix.length}
           <button
             onClick={goToNextPage}
             disabled={currentPage >= matrix.length - 1}
@@ -132,6 +122,26 @@ const App = (): JSX.Element => {
               </option>
             ))}
           </select>
+          <div>
+            go to
+            <select
+              id=''
+              onChange={({ target }) => goToPage(parseInt(target.value))}
+            >
+              {Array(matrix.length)
+                .fill('')
+                .map((_, i) => (
+                  <option
+                    selected={currentPage === i}
+                    key={`select_page_${i}`}
+                    value={i}
+                  >
+                    {i + 1}
+                  </option>
+                ))}
+            </select>
+            page
+          </div>
         </div>
         <table
           style={{
