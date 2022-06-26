@@ -43,6 +43,7 @@ export function useTable(
  * @param {any} data - any - the data you want to manipulate
  * @param {DatatableHeaderGroups[]} tableHeaders - DatatableHeaderGroups[]
  * @param {Function[]} hooks - Function[]
+ * @TODO: Big Refacto needed
  */
 function hookOrchestrator(
   data: any,
@@ -53,35 +54,31 @@ function hookOrchestrator(
   hooksFn: Pagination & Omit<Search, 'searchArray'>
   deps: any
 } {
-  const deps = []
-
   const { useSort, useSearch, usePagination } = hooks.reduce(
-    (a: any, v: any) => ({ ...a, [v.name]: v }),
+    (acc: any, val: any) => ({ ...acc, [val.name]: val }),
     {}
   )
-  const [dataRow, setDataRow] = useState<any[]>([])
+  const [dataRow, setDataRow] = useState<any[]>(data)
 
-  const search = useSearch ? useSearch(data) : {}
+  const search = useSearch ? useSearch(dataRow) : {}
 
-  const sort = useSort
-    ? useSort(tableHeaders, search?.searchArray || data, [search?.searchArray])
-    : {}
+  const tempData = useMemo(
+    () => (search?.searchArray?.length ? search.searchArray : data),
+    [search?.searchArray]
+  )
+
+  const sort = useSort ? useSort(tableHeaders, tempData) : {}
+
   const paginate = usePagination
-    ? usePagination(search?.searchArray || data, [
-        search?.searchArray,
-        sort?.sortData
-      ])
-    : []
-
-  if (search.searchArray) deps.push(search.searchArray)
-  if (sort.sortData) deps.push(sort.sortData)
-  if (paginate.matrix && paginate.limit && paginate.current)
-    deps.push(paginate.limit, paginate.matrix[paginate.current])
+    ? usePagination(tempData, [sort?.sortData])
+    : {}
 
   useEffect(() => {
-    if (paginate.matrix) setDataRow(paginate?.matrix)
-    else setDataRow(search?.searchArray || data)
-  }, [data, ...deps])
+    console.log(paginate)
+    if (paginate.matrix) setDataRow(paginate.matrix)
+    else setDataRow(tempData)
+  }, [tempData, paginate?.matrix])
+  console.log(dataRow, tempData)
 
   return {
     dataRow,
@@ -96,6 +93,6 @@ function hookOrchestrator(
       limitArray: paginate?.limitArray,
       handleSearch: search?.handleSearch
     },
-    deps
+    deps: []
   }
 }
