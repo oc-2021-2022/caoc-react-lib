@@ -8,7 +8,7 @@ import { Search } from '../Type'
  * @returns An object with two properties: searchArray and searchTherm.
  */
 export function useSearch(data: any): Search {
-  const [searchArray, setSearchArray] = useState<any[]>(data)
+  const [searchArray, setSearchArray] = useState<any[]>([])
 
   /* A callback function that takes an event as a parameter, and returns a filtered array of objects. */
   const handleSearch = useCallback(
@@ -26,7 +26,8 @@ export function useSearch(data: any): Search {
           )
         })
       ]
-      setSearchArray(result)
+      if (!event.target.value.length) setSearchArray([])
+      else setSearchArray(result)
     },
     [data]
   )

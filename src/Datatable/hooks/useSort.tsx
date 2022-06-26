@@ -16,7 +16,7 @@ let sortOrder = 1
 export function useSort(
   headers: DatatableHeaderGroups[],
   data: any,
-  deps: any[]
+  deps: any[] = []
 ): Sort {
   const dataUnsorted = useMemo(() => data, deps)
 
