@@ -23,9 +23,9 @@ type TModal = {
 }
 
 /**
- * It renders a modal if isOpen is true, otherwise it renders null
- * @param {TModal}  - isOpen - a boolean that determines whether the modal is open or not
- * @returns A modal component that is rendered in a portal.
+ * It renders a modal that can be closed by clicking outside of it or by pressing the escape key
+ * @param {TModal}  - TModal
+ * @returns A React.Fragment
  */
 export function Modal({
   isOpen,
