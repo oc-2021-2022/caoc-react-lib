@@ -315,7 +315,6 @@ const App = () => {
         <div>
           go to
           <select
-            id=''
             onChange={({ target }) => goToPage(parseInt(target.value))}
           >
             {Array(matrix.length)
@@ -334,20 +333,7 @@ const App = () => {
         </div>
       </div>
       <table>
-        <thead>
-          {tableHeaders.map((headerGroups: DatatableHeaderGroups) => (
-            <tr {...headerGroups.tableHeaderGroupsProps()}>
-              {headerGroups.headers.map((column: DatatableHeader) => (
-                <th {...column.tableHeaderProps(column.sortColumnProps)}>
-                  {column.render('title')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {/* ... */}
-        </tbody>
+        {/* ...DATATABLE Element */}
       </table>
     </>
   )
