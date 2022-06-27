@@ -1,6 +1,7 @@
 # caoc-react-lib
 
 Library for Modal and headless UI datatable.
+
 This library is in `Work In Progress`, code or methods may change at any time.
 
 [![NPM](https://img.shields.io/npm/v/caoc-react-lib.svg)](https://www.npmjs.com/package/caoc-react-lib) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
@@ -15,6 +16,7 @@ npm install --save caoc-react-lib
 ### **Modal**
 
 A modal is a component where you can add text or html inside.
+
 It uses the [ReactDom.createPortal](https://reactjs.org/docs/portals.html) to display the one above the other components
 
 > Modal create automaticaly portal to display him.
@@ -47,6 +49,7 @@ const App = () => {
 ### **Datatable**
 
 `useTable` is a main hook to generate headless datatable.
+
 To use it, pass it two default options :
  - `columns` is array of title and accesors of data
  - `data` is our array of data
@@ -140,6 +143,7 @@ const App = () => {
 There are 3 hooks available: useSort, useSearch, usePagination.
 
 You can use them at the same time or only the one you need.
+
 You can add hooks inside `useTable` like this.
 
 ```ts
@@ -160,7 +164,9 @@ You can add hooks inside `useTable` like this.
 #### UseSort
 
 `useSort` is hook to implement row sorting.
+
 To use it, add hook inside [`useTable`](#datatable).
+
 This hook add click event on each sortable table header and sort `ASC|DESC` corresponding column.
 
 Exemple :
@@ -205,7 +211,9 @@ const App = () => {
 #### useSearch
 
 `useSearch` is hook to implement search.
+
 To use it, add hook inside [`useTable`](#datatable).
+
 Create element or component (can type inside BTW) and add `searchTherm` method in event listening.
 
 ```tsx
@@ -252,7 +260,9 @@ const App = () => {
 #### usePagination
 
 `usePagination` is hook to implement pagination and limit of data displayed.
+
 To use it, add hook inside [`useTable`](#datatable).
+
 Create elements or component allow you to add some event to navigate in datable.
 
 
