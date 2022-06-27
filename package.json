@@ -1,6 +1,6 @@
 {
   "name": "caoc-react-lib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simply react lib for datatable and modal.",
   "author": "AllanCerveaux",
   "license": "MIT",
@@ -60,14 +60,6 @@
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.1.1",
-    "@fortawesome/free-solid-svg-icons": "^6.1.1",
-    "@fortawesome/react-fontawesome": "^0.1.18",
-    "@types/styled-components": "^5.1.25",
-    "styled-components": "^5.3.5"
-  },
-  "resolutions": {
-    "styled-components": "^5"
-  }
+  "dependencies": {},
+  "resolutions": {}
 }

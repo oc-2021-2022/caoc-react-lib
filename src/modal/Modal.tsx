@@ -1,9 +1,3 @@
-import {
-  CloseButton,
-  ModalContainer,
-  ModalContent,
-  ModalShadow
-} from './styles'
 import React, { useEffect } from 'react'
 
 import { ReactPortal } from '../shared/libs/Portal'
@@ -46,11 +40,70 @@ export function Modal({
   return (
     <ReactPortal>
       <React.Fragment>
-        <ModalShadow onClick={handleClose} />
-        <ModalContainer>
-          <CloseButton handleClick={handleClose} />
-          <ModalContent>{children}</ModalContent>
-        </ModalContainer>
+        <div
+          className='modal-shadow'
+          style={{
+            position: 'fixed',
+            height: '100%',
+            width: '100%',
+            top: 0,
+            backgroundColor: 'black',
+            opacity: '0.7',
+            zIndex: 4
+          }}
+          onClick={handleClose}
+        />
+        <section
+          className='modal-container'
+          style={{
+            position: 'absolute',
+            top: 'calc(50% - 250px)',
+            left: 'calc(50% - 250px)',
+            bottom: 0,
+            right: 0,
+            zIndex: 5,
+            display: 'flex',
+            flexDirection: 'column',
+            width: '500px',
+            maxWidth: '100%',
+            height: 'fit-content',
+            maxHeight: '100%',
+            backgroundColor: 'white',
+            boxShadow: '-5px 5px 5px 0px rgba(0, 0, 0, 0.75)',
+            padding: '1em',
+            borderRadius: '.5em'
+          }}
+        >
+          <span
+            className='modal-button--close'
+            style={{
+              position: 'absolute',
+              right: '-10px',
+              top: '-10px',
+              backgroundColor: '#000',
+              borderRadius: '100%',
+              width: '26px',
+              height: '26px',
+              textAlign: 'center',
+              color: '#FFF',
+              fontSize: '1.5em',
+              lineHeight: '20px',
+              cursor: 'pointer'
+            }}
+            onClick={handleClose}
+          >
+            &times;
+          </span>
+          <div
+            className='modal-content'
+            style={{
+              overflow: 'auto',
+              padding: '0px 2em'
+            }}
+          >
+            {children}
+          </div>
+        </section>
       </React.Fragment>
     </ReactPortal>
   )
