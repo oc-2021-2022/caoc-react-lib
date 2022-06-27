@@ -1,6 +1,7 @@
 # caoc-react-lib
 
-Library for Modal and headless UI datatable
+Library for Modal and headless UI datatable.
+This library is in `Work In Progress`, code or methods may change at any time.
 
 [![NPM](https://img.shields.io/npm/v/caoc-react-lib.svg)](https://www.npmjs.com/package/caoc-react-lib) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -13,7 +14,10 @@ npm install --save caoc-react-lib
 ## Usage
 ### **Modal**
 
-A modal box that will use `ReactDOM.createPortal` to display it.
+A modal is a component where you can add text or html inside.
+It uses the [ReactDom.createPortal](https://reactjs.org/docs/portals.html) to display the one above the other components
+
+> Modal create automaticaly portal to display him.
 
 ```tsx
 import  { Modal } from 'caoc-react-lib'
@@ -25,7 +29,13 @@ const App = () => {
     <>
       <h1>My Beautiful Page</h1>
       <button onClick={() => setOpenModal(true)}>Open Modal</button>
-      <Modal>
+      {
+       /**
+        * @prop isOpen - a boolean that determines whether the modal is open or not
+        * @prop handleClose - This is a function that will close the modal with close button on modal or escape key
+        */
+      }
+      <Modal isOpen={open} handleClose={() => setOpen(false)}>
         I'm Modal box
         <button onClick={() => setOpenModal(false)}>close me</button>
       </Modal>
@@ -36,15 +46,19 @@ const App = () => {
 
 ### **Datatable**
 
-`useTable` generate a headless datatable with a list of columns with accessors and a list of corresponding data.
+`useTable` is a main hook to generate headless datatable.
+To use it, pass it two default options :
+ - `columns` is array of title and accesors of data
+ - `data` is our array of data
 
+> `useTable` displays whatever data you pass to it - if you have 1000 data it will display them all.
+> I have not yet implemented the lazy load of data.
+> But you can use [`usePagination`](#usepagination) right now.
+
+Exemple :
 ```tsx
 import React, { useMemo } from 'React'
-import  {
-  usePagination,
-  useSearch,
-  useSort,
-  useTable } from 'caoc-react-lib'
+import  { useTable } from 'caoc-react-lib'
 const App = () => {
   const data = [
     {
@@ -126,7 +140,7 @@ const App = () => {
 There are 3 hooks available: useSort, useSearch, usePagination.
 
 You can use them at the same time or only the one you need.
-You can add hooks inside `useTable` like this
+You can add hooks inside `useTable` like this.
 
 ```ts
   const {
@@ -145,9 +159,11 @@ You can add hooks inside `useTable` like this
 ```
 #### UseSort
 
-`useSort` will allow you to sort your data ascending and descending, it adds an event click on the header of your table if it can be sorted.
+`useSort` is hook to implement row sorting.
+To use it, add hook inside [`useTable`](#datatable).
+This hook add click event on each sortable table header and sort `ASC|DESC` corresponding column.
 
-
+Exemple :
 ```tsx
 import React, { useMemo } from 'React'
 import  {
@@ -188,8 +204,9 @@ const App = () => {
 
 #### useSearch
 
-`useSearch` will allow you to perform a keyword search in all your data.
-You need create your search input and add `searchTherm` method in event change of input.
+`useSearch` is hook to implement search.
+To use it, add hook inside [`useTable`](#datatable).
+Create element or component (can type inside BTW) and add `searchTherm` method in event listening.
 
 ```tsx
 import React, { useMemo } from 'React'
@@ -234,17 +251,12 @@ const App = () => {
 
 #### usePagination
 
-`usePagination` will allow you to limit the data displayed by your datatable.
-Several features will accompany this hook:
-  - goToNextPage: go to next page
-  - goToPreviousPage: go to previous page
-  - currentPage: get current page number
-  - matrix: array of pages
-  - goToPage: go to specific page
-  - updateLimit: update the limit of data displayed in the table
-  - limit: data display limit
-  - limitArray: list of limit you can choose
+`usePagination` is hook to implement pagination and limit of data displayed.
+To use it, add hook inside [`useTable`](#datatable).
+Create elements or component allow you to add some event to navigate in datable.
 
+
+Exemple :
 ```tsx
 import React, { useMemo } from 'React'
 import  {
@@ -256,18 +268,27 @@ const App = () => {
     () => [/*...some column */]],
     []
   )
+  /**
+   * @const matrix - contains all pages.
+   * @const currentPage - get current page displayed.
+   * @method goToNextPage - go to next page of matrix.
+   * @method goToPreviousPage - go to previous page of matrix.
+   * @method goToPage(pageNumber) - go to specific page.
+   * @const limit - limit of data display.
+   * @const limitArray - Default limits you can chooses to display our data.
+   * @method updateLimit(limitNumber) - update limit of data displayed.
+   */
 
   const {
-    tableHeaders,
-    rows,
+    /* ... */
+    matrix,
+    currentPage,
     goToNextPage,
     goToPreviousPage,
-    currentPage,
-    matrix,
     goToPage,
-    updateLimit,
     limit,
     limitArray
+    updateLimit,
   } = useTable({ columns, data: employees }, usePagination)
   return (
     <>
