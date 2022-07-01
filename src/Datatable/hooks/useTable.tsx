@@ -60,7 +60,7 @@ function hookOrchestrator(
   )
   const [dataRow, setDataRow] = useState<any[]>(data)
 
-  const search = useSearch ? useSearch(dataRow) : {}
+  const search = useSearch ? useSearch(data) : {}
 
   const tempData = useMemo(
     () => (search?.searchArray?.length ? search.searchArray : data),
@@ -70,7 +70,7 @@ function hookOrchestrator(
   const sort = useSort ? useSort(tableHeaders, tempData) : {}
 
   const paginate = usePagination
-    ? usePagination(tempData, [sort?.sortData])
+    ? usePagination(tempData, [sort?.sortData, tempData])
     : {}
 
   useEffect(() => {
