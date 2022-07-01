@@ -155,7 +155,15 @@ const App = (): JSX.Element => {
                 {headerGroups.headers.map((column: DatatableHeader) => (
                   <th {...column.tableHeaderProps(column.sortColumnProps)}>
                     {column.render('title')}
-                    <span>{column.canSort ? '🔼🔽' : ''}</span>
+                    <span>
+                      {column.canSort
+                        ? column.isSorted
+                          ? column.sortOrder > 0
+                            ? '🔼'
+                            : '🔽'
+                          : '🔼🔽'
+                        : ''}
+                    </span>
                   </th>
                 ))}
               </tr>
