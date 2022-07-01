@@ -23,6 +23,7 @@ export type DatatableHeaderColumn = {
   accessor: string | undefined
   canSort: boolean
   isSorted: boolean
+  sortOrder: number
   render: (accessor: string) => React.ReactNode
   tableHeaderProps: (props?: SortColumnProps) => HeadersProps
   sortColumnProps: SortColumnProps

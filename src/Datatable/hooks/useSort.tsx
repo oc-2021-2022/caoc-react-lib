@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { headerGroupUtils } from '../utils/headerGroup'
 
 // @TODO: Move this another place
-let sortOrder = 1
+let sortOrder = -1
 
 /**
  * It adds a `onClick` prop to each header column, and when the header column is clicked, it sorts the
@@ -24,6 +24,7 @@ export function useSort(
 
   const handleClick = useCallback(
     (column: DatatableHeader) => {
+      resetSorted(headers)
       const dataSorted = [...sortByHeader(column, dataUnsorted)]
       setSortData(dataSorted)
     },
@@ -68,6 +69,7 @@ function addSortPropsToHeaderColumn(
  */
 function sortByHeader(column: DatatableHeader, data: any) {
   const [row, subrow] = (column.accessor as string).split('.')
+  column.isSorted = true
   const sortedData = data.sort((a: any, b: any) => {
     const aRow = row && subrow ? a[row][subrow] : a[row]
     const bRow = row && subrow ? b[row][subrow] : b[row]
@@ -81,4 +83,11 @@ function sortByHeader(column: DatatableHeader, data: any) {
   })
   sortOrder = sortOrder < 0 ? Math.abs(sortOrder) : -Math.abs(sortOrder)
   return sortedData
+}
+
+function resetSorted(headerGroup: DatatableHeaderGroups[]): void {
+  headerGroupUtils(headerGroup).getColumns.map((column: DatatableHeader) => {
+    column.sortOrder = sortOrder
+    column.isSorted = false
+  })
 }
