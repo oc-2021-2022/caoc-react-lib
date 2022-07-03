@@ -1,12 +1,10 @@
-import {
-  DatatableHeaderGroups,
-  Pagination,
-  Row,
-  Search,
-  TDatatable
-} from '../Type'
+import { DatatableHeaderGroups, Row, TDatatable } from '../Type'
 import { generateHeader, generateRowGroups } from '../Datatable'
 import { useEffect, useMemo, useState } from 'react'
+
+import { usePagination } from './usePagination'
+import { useSearch } from './useSearch'
+import { useSort } from './useSort'
 
 /**
  * It takes in data and columns, and returns a tableHeaders, rows, and hooksFn
@@ -51,30 +49,32 @@ function hookOrchestrator(
   hooks: Function[]
 ): {
   dataRow: any[]
-  hooksFn: Pagination & Omit<Search, 'searchArray'>
+  hooksFn: any
   deps: any
 } {
-  const { useSort, useSearch, usePagination } = hooks.reduce(
-    (acc: any, val: any) => ({ ...acc, [val.name]: val }),
-    {}
-  )
+  // const hooksObj = hooks.reduce(
+  //   (acc: any, val: any) => ({ ...acc, [val.name]: val }),
+  //   {}
+  // )
   const [dataRow, setDataRow] = useState<any[]>(data)
 
-  const search = useSearch ? useSearch(data) : {}
+  const mSearch = hooks.find((h) => h === useSearch) ? useSearch(data) : null
 
   const tempData = useMemo(
-    () => (search?.searchArray?.length ? search.searchArray : data),
-    [search?.searchArray]
+    () => (mSearch?.searchArray?.length ? mSearch?.searchArray : data),
+    [mSearch?.searchArray]
   )
 
-  const sort = useSort ? useSort(tableHeaders, tempData) : {}
+  const sort = hooks.find((h) => h === useSort)
+    ? useSort(tableHeaders, tempData)
+    : null
 
-  const paginate = usePagination
+  const paginate = hooks.find((h) => h === usePagination)
     ? usePagination(tempData, [sort?.sortData, tempData])
-    : {}
+    : null
 
   useEffect(() => {
-    if (paginate.matrix) setDataRow(paginate.matrix)
+    if (paginate?.matrix) setDataRow(paginate?.matrix)
     else setDataRow(tempData)
   }, [tempData, paginate?.matrix])
 
@@ -89,7 +89,7 @@ function hookOrchestrator(
       updateLimit: paginate?.updateLimit,
       limit: paginate?.limit,
       limitArray: paginate?.limitArray,
-      handleSearch: search?.handleSearch
+      handleSearch: mSearch?.handleSearch
     },
     deps: []
   }
