@@ -231,11 +231,11 @@ const App = () => {
   const {
     tableHeaders,
     rows,
-    searchTherm
+    handleSearch
   } = useTable({ columns, data: employees }, useSearch)
   return (
     <>
-      <input type='text' onChange={searchTherm} />
+      <input type='text' onChange={handleSearch} />
       <table>
         <thead>
           {tableHeaders.map((headerGroups: DatatableHeaderGroups) => (
