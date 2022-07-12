@@ -11,6 +11,14 @@
   "engines": {
     "node": ">=10"
   },
+  "keywords": [
+    "datatable",
+    "table",
+    "react",
+    "react-table",
+    "react-datatable",
+    "typescript"
+  ],
   "scripts": {
     "build": "microbundle-crl --no-compress --css-modules false --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --css-modules false --format modern,cjs",
